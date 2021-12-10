@@ -4,9 +4,6 @@ val SEVEN = 3
 val EIGHT = 7
 val SIX_LETTERS = 6
 
-val letterWeights = mapOf("a" to 1, "b" to 2, "c" to 3, "d" to 5, "e" to 6, "f" to 8, "g" to 9)
-val numberWeights = mapOf(29 to 0, 11 to 1, 23 to 2, 26 to 3, 18 to 4, 25 to 5, 31 to 5, 12 to 7, 34 to 8, 28 to 9)
-
 class Board() {
     var segmentA = "-"
     var segmentB = "-"
