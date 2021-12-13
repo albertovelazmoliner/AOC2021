@@ -2,17 +2,12 @@ const assert = require('assert');
 
 function parseData(data) {
     const lines = data.split('\n');
-    let isFold = false;
     const dots = [], folds = []
     lines.forEach(line => {
-        if(!isFold) {
-            if(line === '') isFold = true;
-            else {
-                dots.push(line.split(',').map(element => parseInt(element)));
-            }
-        } else {
-            line = line.substring(11, line.length).split('=').map((element, index) => index === 0 ? element : parseInt(element));
-            folds.push(line);
+        if (line.indexOf('=') === -1 && line.length > 0) {
+            dots.push(line.split(',').map(element => parseInt(element)));
+        } else if(line.indexOf('=') > -1) {
+            folds.push(line.substring(11, line.length).split('=').map((element, index) => index === 0 ? element : parseInt(element)));
         }
     });
     return {dots, folds};
@@ -20,16 +15,14 @@ function parseData(data) {
 
 function foldGrid(grid, fold) {
     let numberOfDots = 0
-    let foldVertical = fold[0] === 'y';
-    const gridLines = foldVertical ? grid.length - 1: grid[0].length - 1;
     const newGrid = [];
-    const limitI = foldVertical ? fold[1] : grid.length;
-    const limitJ = foldVertical ? grid[0].length : fold[1];
+    const limitI = fold[0] === 'y' ? fold[1] : grid.length;
+    const limitJ = fold[0] === 'y' ? grid[0].length : fold[1];
     for(let i = 0; i < limitI; i++) {
         const newLine = [];
         for(let j = 0; j < limitJ; j++) {
-            const element = (foldVertical) ? grid[i][j] === '#' || grid[gridLines - i][j] === '#' ? '#' : '.'
-            : grid[i][j] === '#' || grid[i][gridLines - j] === '#' ? '#' : '.';
+            const element = (fold[0] === 'y') ? grid[i][j] === '#' || grid[grid.length - 1 - i][j] === '#' ? '#' : '.'
+            : grid[i][j] === '#' || grid[i][grid[0].length - 1 - j] === '#' ? '#' : '.';
             newLine.push(element);
             if (element === '#') numberOfDots++;
         }
